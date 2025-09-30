@@ -1,0 +1,105 @@
+/* Modern responsive Weather component styles
+   - Mobile-first
+   - CSS variables for easy theming
+   - Clear comments for quick review
+*/
+
+:root{
+  --bg: #0f172a; /* slate-900 */
+  --card: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  --muted: #94a3b8; /* slate-400 */
+  --accent: #60a5fa; /* blue-400 */
+  --glass: rgba(255,255,255,0.04);
+  --radius: 14px;
+  --max-width: 560px;
+}
+
+*{box-sizing: border-box;margin:0;padding:0}
+
+/* root layout */
+.weather-root{
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.06), transparent), var(--bg);
+  padding: 48px 16px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: #e6eef8;
+}
+
+.weather-card{
+  width: 100%;
+  max-width: var(--max-width);
+  background: var(--card);
+  backdrop-filter: blur(6px) saturate(110%);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 6px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* header */
+.weather-header{display:flex;flex-direction:column;gap:2px;margin-bottom:12px}
+.weather-title{font-size:1.25rem;font-weight:600}
+.weather-sub{color:var(--muted);font-size:0.85rem}
+
+/* controls: input + button */
+.weather-controls{display:flex;gap:10px;margin-top:12px}
+.weather-input{
+  flex:1;
+  min-height:44px;
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.06);
+  background: transparent;
+  color:inherit;
+  outline:none;
+  font-size:1rem;
+}
+.weather-input::placeholder{color:var(--muted)}
+.weather-input:focus{box-shadow:0 0 0 4px rgba(96,165,250,0.08);border-color:var(--accent)}
+
+.weather-btn{
+  background: linear-gradient(180deg,var(--accent),#3b82f6);
+  border:none;color:#04253b;padding:0 16px;border-radius:10px;min-width:96px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:600
+}
+.weather-btn:disabled{opacity:0.6;cursor:default}
+
+/* small loader used inside button */
+.loader{width:18px;height:18px;border:2px solid rgba(255,255,255,0.25);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* messages */
+.weather-messages{margin-top:10px}
+.weather-error{color:#ffb4b4;background:rgba(255,180,180,0.06);padding:8px 10px;border-radius:8px;font-size:0.95rem}
+
+/* details card */
+.weather-details{margin-top:16px;padding:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+
+.location-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.location-name{font-weight:700;font-size:1.05rem}
+.localtime{color:var(--muted);font-size:0.9rem}
+
+.main-row{display:flex;align-items:center;gap:18px}
+.temperature{flex:1}
+.temp-value{font-size:2.6rem;font-weight:700;line-height:1}
+.temp-text{color:var(--muted);margin-top:6px}
+.condition-icon img{display:block}
+
+.extra-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.extra-item{background:var(--glass);padding:8px;border-radius:8px;color:var(--muted);font-size:0.95rem}
+
+.weather-footer{margin-top:14px;color:var(--muted);font-size:0.82rem;text-align:center}
+
+/* utility: visually-hidden (for labels) */
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+
+/* Responsive improvements */
+@media (max-width:420px){
+  .temp-value{font-size:2rem}
+  .weather-card{padding:16px}
+  .weather-controls{flex-direction:column}
+  .weather-btn{min-width:100%;padding:12px}
+  .extra-grid{grid-template-columns:1fr}
+}

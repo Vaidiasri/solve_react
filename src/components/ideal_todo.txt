@@ -1,0 +1,83 @@
+import { useState } from "react";
+
+// Generate a unique ID for each todo
+const generateId = () => Math.random().toString(36).substr(2, 9);
+
+export default function TodoList() {
+  const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
+  const [completed, setCompleted] = useState([]);
+
+  const handleAdd = () => {
+    if (!todo.trim()) return; // Prevent empty todos
+    const newTodo = { id: generateId(), text: todo, completed: false };
+    setTodos([...todos, newTodo]); // Immutable addition
+    setTodo("");
+  };
+
+  const handleComplete = (id) => {
+    // Find the todo and update its completed status immutably
+    const updatedTodos = todos.map((item) =>
+      item.id === id ? { ...item, completed: true } : item
+    );
+    setTodos(updatedTodos);
+
+    // Move to completed list after 5 seconds
+    setTimeout(() => {
+      const completedTodo = updatedTodos.find((item) => item.id === id);
+      if (completedTodo) {
+        setCompleted((prev) => [...prev, completedTodo]);
+        setTodos((prev) => prev.filter((item) => item.id !== id));
+      }
+    }, 5000);
+  };
+
+  return (
+    <div className="todo-container">
+      <div className="todo-input-section">
+        <input
+          type="text"
+          placeholder="Add todo..."
+          value={todo}
+          onChange={(e) => setTodo(e.target.value)}
+          className="todo-input"
+          aria-label="Add a new todo"
+        />
+        <button onClick={handleAdd} className="add-btn">
+          Add
+        </button>
+      </div>
+
+      <div className="todo-section">
+        <h3>Pending Todos</h3>
+        <ul className="todo-list">
+          {todos.map((item) => (
+            <li key={item.id} className="todo-item">
+              <input
+                type="checkbox"
+                checked={item.completed}
+                onChange={() => handleComplete(item.id)}
+                className="todo-checkbox"
+                aria-label={`Mark ${item.text} as completed`}
+              />
+              <span className={item.completed ? "completed-text" : ""}>
+                {item.text}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="todo-section">
+        <h3>Completed Todos</h3>
+        <ul className="todo-list">
+          {completed.map((item) => (
+            <li key={item.id} className="todo-item completed-item">
+              {item.text}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
